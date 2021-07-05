@@ -150,7 +150,7 @@ namespace SkalProj_Datastrukturer_Minne
              * Create a switch with cases to enqueue items or dequeue items
              * Make sure to look at the queue after Enqueueing and Dequeueing to see how it behaves
             */
-            
+
             Console.WriteLine("Please navigate through the menu by inputting  \n(1 for adding to the queue, 2 for deleting a value to the queue, 3. For se whats in th queue. q for go to main menu.)");
             string input = Console.ReadLine();
             char nav = input[0];
@@ -171,7 +171,7 @@ namespace SkalProj_Datastrukturer_Minne
                         break;
                     case '2':
                         Console.WriteLine("If you want to delete the first value in the queue.");
-                        string dequeue  = "dequeue";
+                        string dequeue = "dequeue";
                         TestQueue("", dequeue, quevalues);
                         Console.WriteLine("Please navigate through the menu by inputting  \n(1 for adding to the queue, 2 for deleting a value from the queue, 3. For se whats in th queue. q for go to main menu.)");
                         input = Console.ReadLine();
@@ -190,15 +190,15 @@ namespace SkalProj_Datastrukturer_Minne
             }
         }
 
-        private static void TestQueue(string quevalue,string enqueue_dequeue, Queue<string> quevalues)
+        private static void TestQueue(string quevalue, string enqueue_dequeue, Queue<string> quevalues)
         {
-          
 
-            if(enqueue_dequeue == "enqueue")
+
+            if (enqueue_dequeue == "enqueue")
             {
                 quevalues.Enqueue(quevalue);
             }
-            else if(enqueue_dequeue == "dequeue")
+            else if (enqueue_dequeue == "dequeue")
             {
                 quevalues.Dequeue();
             }
@@ -280,14 +280,14 @@ namespace SkalProj_Datastrukturer_Minne
         private static string ReverseText(string stackvalue)
         {
             var stack = new Stack<char>();
-            foreach(char c in stackvalue)
+            foreach (char c in stackvalue)
             {
                 stack.Push(c);
             }
 
             stackvalue = string.Empty;
 
-            while(stack.Count > 0)
+            while (stack.Count > 0)
             {
                 stackvalue += stack.Pop();
             }
@@ -302,40 +302,82 @@ namespace SkalProj_Datastrukturer_Minne
              * Example of incorrect: (()]), [), {[()}],  List<int> list = new List<int>() { 1, 2, 3, 4 );
              */
 
+           bool result = CheckValueParanthesis();
+
+            if (result)
+            {
+                Console.WriteLine("THe input is correct!");
+            }
+            else
+            {
+                Console.WriteLine("THe input is incorrect!");
+            }
+
+        }
+
+        private static bool CheckValueParanthesis()
+        {
             Console.WriteLine("Add a string with values to the stack  \n(For example (()), {}, []");
             string value = Console.ReadLine();
             var stack = new Stack<char>();
+            bool result = false;
+
+            var dict = new Dictionary<char, char>
+            {
+                {'(', ')' },
+                { '{', '}' },
+                { '[', ']' }
+            };
+
+            //foreach (char c in example)
             foreach (char c in value)
             {
-                stack.Push(c);
-            }
-
-
-            var charsstart = "({[";
-            var charsends = ")}]";
-
-            foreach (var item in stack)
-            {
-                if (charsstart.Contains(item))
+                if (dict.ContainsKey(c))
                 {
-               
-                 
+                    stack.Push(c);
                 }
-                if (charsends.Contains(item))
+                if (stack.Count > 0)
                 {
-                    Console.WriteLine("This is correct");
+                    if (dict.ContainsValue(c))
+                    {
+                        //Slår upp en key i dict
+                        //Vi slår upp på värdet som senast är tillagt i stacken och tar bort det samtidigt
+                        if (stack.Count == 0)
+                        {
+                            result = false;
+                        }
+
+
+                        var lastInStack = stack.Pop(); //Är alltid en key
+                        if (dict[lastInStack] != c)
+                        {
+                            //Wrong
+                            result = false;
+                        }
+                        else
+                        {
+                            //Ok move on
+                            result = true;
+                        }
+                    }
+                    else
+                    {
+                        result = false;
+                    }
                 }
                 else
                 {
-                    Console.WriteLine("This is incorrect");
+                    result = false;
                 }
             }
-
-
-
-
+            if (stack.Count > 0)
+            {
+                result = false;
+            }
+            return result;
         }
 
     }
 }
+
 
